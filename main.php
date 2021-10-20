@@ -11,6 +11,8 @@ $node->add(1, 222);
 // $node->add(4, 333);
 $node->delete(3);
 $node->delete(3);
+$node->update(2, 321);
+$node->update(3, 777);
 
 
 print_r($node->showList());exit;
