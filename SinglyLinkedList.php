@@ -1,6 +1,7 @@
 <?php
 
 require "./Node.php";
+
 /**
  * 单向链表
  */
@@ -18,40 +19,29 @@ Class SinglyLinkedList
 	public function __construct($data)
 	{
 		$this->head = new Node($data);
-		$this->size = 1;
+		$this->size++;
 	}
+
 
 	/**
 	 * 指定节点插入
 	 */
 	public function add($index, $data)
 	{
-		print_r($this->size);
 		if ($index > $this->size + 1) {
 			throw new Exception("超过链表长度");
 		}
 
 		$prev = $this->head;
-
-		for ($i = 0; $i <= $index; $i++) {
-			if ($i == $index) {
-				$prev->data = $data;
-				print_r($prev);
-			}
+		for ($i = 1; $i <= $index; $i++) {
 			if ($prev->next != null) {
 				$prev = $prev->next;
 			}
-			if( $i==$index ) {
-				// $prev->data = $data;
-				// $prev = $prev->next;
-			}
-            // $prev = $prev->next;
 		}
+	
+		$prev->next = new Node($data, $prev->next);
+		$this->size++;
 		
-		if ($index > $this->size) {
-			$prev->next = new Node($data, $prev->next);
-			$this->size++;
-		}
 	}
 
 	/**
@@ -75,6 +65,9 @@ Class SinglyLinkedList
 		$this->size--;
 	}
 
+	/**
+	 * 查询链表中的所有元素 时间复杂度：On
+	 */
 	public function showList()
 	{
 		$data = [];
