@@ -1,27 +1,40 @@
 <?php
 
-require "./Node.php";
-
 /**
- * 单向链表
+ * 循环链表
  */
-Class SinglyLinkedList
+Class CircularLinkedList
 {
-    // 头部的虚拟节点
+	// 头部的虚拟节点
     public $head;
 
     // 链表长度
     public $size = 0;
 
+    // 头节点位置
+    public $head_node = 0;
+
+    // 尾节点位置
+    public $tail_node = 0;
+
+    // 链表的长度
+    public $linked_list_size = 8;
+
+
     /**
      * 初始化首节点
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->head = new Node($data);
-        $this->size++;
+
     }
 
+    public function addFirst($data)
+    {
+        $this->head = new Node($data);
+        $this->head->next = $this->head;
+        $this->size++;
+    }
 
     /**
      * 指定节点插入
@@ -35,6 +48,7 @@ Class SinglyLinkedList
         $prev = $this->head;
         for ($i = 0; $i < $index; $i++) {
             if ($prev->next != null) {
+                // 如果下一个位置是想要插入的位置
                 if ($i + 1 == $index) {
                     continue;
                 }
@@ -43,8 +57,7 @@ Class SinglyLinkedList
         }
     
         $prev->next = new Node($data, $prev->next);
-        $this->size++;
-        
+        $this->size++; 
     }
 
     /**
@@ -89,6 +102,37 @@ Class SinglyLinkedList
         }
     }
 
+    public function push($val)
+    {
+        // 判断是否队空
+        if ($this->head_node == $this->tail_node) {
+            $this->addFirst($val);
+            $this->tail_node++;
+            return;
+        }
+        // 判断队列是否满了 - 公式 （tail + 1） % linked_list_size == head
+        if (($this->tail_node + 1) % $this->linked_list_size == $this->head_node) {
+            throw new Exception("队列已满，请等待");
+        }
+
+        $this->add($this->size, $val);
+        $this->tail_node++;
+    }
+
+    public function pop()
+    {
+        // 判断是否队空
+        if ($this->head_node == $this->tail_node) {
+            return null;
+        }
+
+        $return = $this->head->data;
+        $this->head = $this->head->next;
+        $this->size--;
+        $this->head_node++;
+        return $return;
+    }
+
     /**
      * 查询链表中的所有元素 时间复杂度：On
      */
@@ -106,5 +150,3 @@ Class SinglyLinkedList
         return $data;
     }
 }
-
-?>
